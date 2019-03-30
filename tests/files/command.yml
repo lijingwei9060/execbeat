@@ -1,0 +1,13 @@
+commands:
+  - 
+    name: MegaRAID
+    command: MegaCli
+    args: "-adpAll -aAll"
+    timeout: 5m
+    schedule: "@every 30s"
+    namespace: "hw.raid"
+    separator: ":"
+    droperror: true
+    fields:
+      cid: "sdfwejifweif"
+      cname: "sjdifjweifjwfej"  

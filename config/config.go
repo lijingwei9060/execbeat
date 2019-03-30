@@ -3,12 +3,12 @@
 
 package config
 
-import "time"
+import (
+	"github.com/lijingwei9060/execbeat/utils/schedulecommand"
+)
 
 type Config struct {
-	Period time.Duration `config:"period"`
+	Commands []schedulecommand.ScheduleCommandConfig `config:"commands" validate:"required"`
 }
 
-var DefaultConfig = Config{
-	Period: 1 * time.Second,
-}
+var DefaultConfig = Config{}

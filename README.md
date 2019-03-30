@@ -35,6 +35,19 @@ For further development, check out the [beat developer guide](https://www.elasti
 To build the binary for Execbeat run the command below. This will generate a binary
 in the same directory with the name execbeat.
 
+Manually install magefile
+$ go get github.com/magefile/mage
+
+Change path in github.com/elastic/beats/libbeat/scripts/Makefile:15
+
+Instead of:
+ES_BEATS?=..## @community_beat Must be set to ./vendor/github.com/elastic/beats. It must always be a relative path.
+
+Use:
+ES_BEATS?=vendor/github.com/elastic/beats## @community_beat Must be set to ./vendor/github.com/elastic/beats. It must always be a relative path.
+
+Make sure you leave no spaces between beats and ##. This was causing make setup to fail such as below.
+
 ```
 make
 ```

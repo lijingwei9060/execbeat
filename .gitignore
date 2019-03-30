@@ -5,3 +5,5 @@
 /execbeat
 /execbeat.test
 *.pyc
+vendor/*
+!vendor/vendor.json

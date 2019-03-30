@@ -2,7 +2,8 @@ package beater
 
 import (
 	"fmt"
-	"time"
+
+	"github.com/lijingwei9060/execbeat/utils/schedulecommand"
 
 	"github.com/elastic/beats/libbeat/beat"
 	"github.com/elastic/beats/libbeat/common"
@@ -42,25 +43,20 @@ func (bt *Execbeat) Run(b *beat.Beat) error {
 		return err
 	}
 
-	ticker := time.NewTicker(bt.config.Period)
-	counter := 1
+	for _, c := range bt.config.Commands {
+		if !c.Enabled {
+			continue // 如果没有启动，则跳过
+		}
+		sc, _ := schedulecommand.New(c, bt.client)
+		logp.Info("start command %v at interval %v", c.Name, c.Schedule)
+		go sc.Run()
+	}
+
 	for {
 		select {
 		case <-bt.done:
 			return nil
-		case <-ticker.C:
 		}
-
-		event := beat.Event{
-			Timestamp: time.Now(),
-			Fields: common.MapStr{
-				"type":    b.Info.Name,
-				"counter": counter,
-			},
-		}
-		bt.client.Publish(event)
-		logp.Info("Event sent")
-		counter++
 	}
 }
 
