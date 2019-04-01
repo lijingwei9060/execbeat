@@ -1,5 +1,33 @@
 execbeat:
-  period: 1s
+  # Defines commands to exec 
+  commands: 
+    -
+      # command name for logging 
+      name: test 
+      # enabled optional ,default to false
+      enabled: true 
+      # command ,maybe a python or shell ,return must be K:V 
+      command: echo
+      args: "key:value"
+      # Default command exec timeout is 5m ,such as virsh dangerous command should be set timeout 
+      timeout: 5s
+      # all result will be appended to hw.test.key
+      namespace: "hw.test"
+      # if command faild to error, the output will be drop and sends a error event 
+      droperror: true 
+      # command will be called at schedule ,this parameter should be setted
+      schedule: "@every 10m"
+      # fields is a map optionly
+      fields:
+        key: value
+
+#================================ General ====================================
+fields:
+  # CID stands for customer id
+  CID: cid-12345678
+  # CNAME stands for customer name
+  CNAME: 广州市凭高软件股份有限公司
+fields_under_root: true
 processors:
 - add_cloud_metadata: ~
 

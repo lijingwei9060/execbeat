@@ -26,6 +26,7 @@ import (
 
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
+	"github.com/pkg/errors"
 
 	"github.com/elastic/beats/dev-tools/mage"
 )
@@ -75,6 +76,7 @@ func Package() {
 	defer func() { fmt.Println("package ran for", time.Since(start)) }()
 
 	mage.UseCommunityBeatPackaging()
+	customizePackaging()
 
 	mg.Deps(Update)
 	mg.Deps(CrossBuild, CrossBuildGoDaemon)
@@ -108,4 +110,30 @@ func GoTestUnit(ctx context.Context) error {
 // Use RACE_DETECTOR=true to enable the race detector.
 func GoTestIntegration(ctx context.Context) error {
 	return mage.GoTest(ctx, mage.DefaultGoTestIntegrationArgs())
+}
+
+// customizePackaging modifies the package specs to add the modules and
+// modules.d directory.
+func customizePackaging() {
+	var (
+		moduleTarget = "scripts"
+		module       = mage.PackageFile{
+			Mode:   0644,
+			Source: "scripts",
+		}
+	)
+
+	for _, args := range mage.Packages {
+		pkgType := args.Types[0]
+		switch pkgType {
+		case mage.TarGz, mage.Zip, mage.Docker:
+			args.Spec.Files[moduleTarget] = module
+		case mage.Deb, mage.RPM:
+			args.Spec.Files["/etc/{{.BeatName}}/"+moduleTarget] = module
+		case mage.DMG:
+			args.Spec.Files["/etc/{{.BeatName}}/"+moduleTarget] = module
+		default:
+			panic(errors.Errorf("unhandled package type: %v", pkgType))
+		}
+	}
 }

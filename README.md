@@ -2,6 +2,9 @@
 
 Welcome to Execbeat.
 
+This beat can exec shell/python and so on ,get result like "k:v" format and send to elasticsearch.
+What I wanna do is gathering information(hardware,os,runtime configuratons).
+
 Ensure that this folder is at the following location:
 `${GOPATH}/src/github.com/lijingwei9060/execbeat`
 
@@ -47,6 +50,8 @@ Use:
 ES_BEATS?=vendor/github.com/elastic/beats## @community_beat Must be set to ./vendor/github.com/elastic/beats. It must always be a relative path.
 
 Make sure you leave no spaces between beats and ##. This was causing make setup to fail such as below.
+
+Make sure the version of mage is below 1.8 , otherwise mage package will failed .
 
 ```
 make
