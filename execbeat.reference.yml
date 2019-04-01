@@ -30,7 +30,7 @@ fields:
   # CID stands for customer id
   CID: cid-12345678
   # CNAME stands for customer name
-  CNAME: 广州市凭高软件股份有限公司
+  CNAME: 广州市品高软件股份有限公司
 fields_under_root: true
 #================================ General ======================================
 
